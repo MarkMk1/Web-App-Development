@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Project 1</title>
+  <title>Project</title>
   <!-- styles -->
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans|Baumans' type='text/css'>
   <link rel="stylesheet" href="styles/reset.css" type="text/css" media="screen" />
@@ -15,7 +15,7 @@
  <!-- Include stylesheet -->
 	<link href="https://cdn.quilljs.com/1.2.5/quill.snow.css" rel="stylesheet">
 	<div>
-		<p>There's this shit here... </p>
+		<p>There's this here... </p>
 	</div>
 	<!-- Create the editor container -->
 	<div id="editor">
@@ -26,10 +26,12 @@
 	<div>
 		<button type="button" onclick="submitButton.uploadDelta()">Save</button>
 	</div>
-	<div>
+	
+<!--	<div>
 		<button type="button" onclick="fixButton.deltaToString()">debug</button>
 	</div>
-	
+-->
+
 	<!-- JQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
@@ -41,17 +43,30 @@
 	  var quill = new Quill('#editor', {
 		theme: 'snow'
 	  });
-	  
 	</script> 
+	
+<!-- 
+So I want to post the dir at the same time as the delta, 
+check the dir, and treat the delta appropriately. 
+How do I upload the two at once?
+-->
+
 	<script>
+	var delta;
 		var submitButton = {
 			uploadDelta: function () {
-					var delta = quill.getContents();
-					localStorage.setItem("delta", delta)
-					
+					delta = quill.getContents();
+					console.log(delta);
+					var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
+					localStorage.setItem("upScript", upScript)
+					dir = localStorage.dir
+					$.post( upScript, [delta, localStorage.dir] );
+					return upScript;
 					}
 		}
 	</script>
+	
+<!--
 	<script>
 		var fixButton = {	
 			deltaToString: function () {
@@ -62,10 +77,7 @@
 			}
 		}
 	</script>
-
-	
-	<!--So I need to use 'getContents' (https://quilljs.com/docs/api/#content), to get the delta. I'm attaching this to a button. 
-		Where do you put that? Also where do I store this delta? -->
+-->
 	
 </body>
 </html>

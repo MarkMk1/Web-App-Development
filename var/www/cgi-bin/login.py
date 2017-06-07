@@ -24,7 +24,7 @@ with open(cgi_dir + 'User_Info.csv', newline='') as csvfile:
 			if enteredPass == password:
 				user_dir = dir
 				print("<script>localStorage.setItem(\"dir\"," + "\"" + user_dir + "\"" + " )</script>")
-				print("<a href=\"http://win371.ad.utwente.nl/student/s1811185/webappdev/editor2.html\">Project 1</a>")
+				print("<a href=\"http://win371.ad.utwente.nl/student/s1811185/webappdev/editor.html\">Project 1</a>")
 				break
 		else:
 			print("bg")
