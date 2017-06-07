@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+ 
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project 1</title>
+  <!-- styles -->
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans|Baumans' type='text/css'>
+  <link rel="stylesheet" href="styles/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" />
+</head>
+ 
+<body>
+ <!-- Include stylesheet -->
+	<link href="https://cdn.quilljs.com/1.2.5/quill.snow.css" rel="stylesheet">
+	<div>
+		<p>There's this shit here... </p>
+	</div>
+	<!-- Create the editor container -->
+	<div id="editor">
+	  <p>Hello World!</p>
+	  <p>Some initial <strong>bold</strong> text</p>
+	  <p><br></p>
+	</div>
+	<div>
+		<button type="button" onclick="submitButton.uploadDelta()">Save</button>
+	</div>
+	<div>
+		<button type="button" onclick="fixButton.deltaToString()">debug</button>
+	</div>
+	
+	<!-- JQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!-- Quill library -->
+	<script src="https://cdn.quilljs.com/1.2.5/quill.js"></script>
+
+	<!-- Quill editor -->
+	<script>
+	  var quill = new Quill('#editor', {
+		theme: 'snow'
+	  });
+	  
+	</script> 
+	<script>
+		var submitButton = {
+			uploadDelta: function () {
+					var delta = quill.getContents();
+					localStorage.setItem("delta", delta)
+					
+					}
+		}
+	</script>
+	<script>
+		var fixButton = {	
+			deltaToString: function () {
+				f = localStorage.delta.toString()
+				var ret = f.contents
+				localStorage.setItem("ret", ret)
+				return ret;
+			}
+		}
+	</script>
+
+	
+	<!--So I need to use 'getContents' (https://quilljs.com/docs/api/#content), to get the delta. I'm attaching this to a button. 
+		Where do you put that? Also where do I store this delta? -->
+	
+</body>
+</html>

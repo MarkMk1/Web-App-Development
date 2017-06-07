@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+ 
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project</title>
+  <!-- styles -->
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans|Baumans' type='text/css'>
+  <link rel="stylesheet" href="styles/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" />
+</head>
+ 
+<body>
+ <!-- Include stylesheet -->
+	<link href="https://cdn.quilljs.com/1.2.5/quill.snow.css" rel="stylesheet">
+	<div>
+		<p>There's this here... </p>
+	</div>
+	<!-- Create the editor container -->
+	<div id="editor">
+	  <p>Hello World!</p>
+	  <p>Some initial <strong>bold</strong> text</p>
+	  <p><br></p>
+	</div>
+	<div>
+		<button type="button" onclick="submitButton.uploadDelta()">Save</button>
+	</div>
+	
+<!--	<div>
+		<button type="button" onclick="fixButton.deltaToString()">debug</button>
+	</div>
+-->
+
+	<!-- JQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<!-- Quill library -->
+	<script src="https://cdn.quilljs.com/1.2.5/quill.js"></script>
+
+	<!-- Quill editor -->
+	<script>
+	  var quill = new Quill('#editor', {
+		theme: 'snow'
+	  });
+	</script> 
+	
+<!-- 
+So I want to post the dir at the same time as the delta, 
+check the dir, and treat the delta appropriately. 
+How do I upload the two at once?
+-->
+
+	<script>
+	var delta;
+		var submitButton = {
+			uploadDelta: function () {
+					delta = quill.getContents();
+					console.log(delta);
+					var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
+					localStorage.setItem("upScript", upScript)
+					$.post( upScript, [delta, localStorage.dir] );
+					return upScript;
+					}
+		}
+	</script>
+	
+<!--
+	<script>
+		var fixButton = {	
+			deltaToString: function () {
+				f = localStorage.delta.toString()
+				var ret = f.contents
+				localStorage.setItem("ret", ret)
+				return ret;
+			}
+		}
+	</script>
+-->
+	
+</body>
+</html>
