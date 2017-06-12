@@ -17,8 +17,8 @@ print('<BODY>')
 with open(cgi_dir + 'User_Info.csv', newline='') as csvfile:
 	reader = csv.DictReader(csvfile)
 	for row in reader:
-		name = row['name']
-		password = row['pwd']
+		name = row["name"]
+		password = row["pwd"]
 		dir = row['a']
 		if enteredName == name:
 			if enteredPass == password:
@@ -28,9 +28,9 @@ with open(cgi_dir + 'User_Info.csv', newline='') as csvfile:
 				break
 		else:
 			print("bg")
-			name = "fuck you"
-			password = "dickshit"
-			dir = "www.suckabagofdicks.com"
+			name = "="
+			password = "="
+			dir = "www.=.com"
 
 			
 #print(name)
@@ -40,4 +40,3 @@ with open(cgi_dir + 'User_Info.csv', newline='') as csvfile:
 	#print(row['name'], row['pwd'])
 #print(name + ', ' + pwd)
 print('</BODY></HTML>')
-

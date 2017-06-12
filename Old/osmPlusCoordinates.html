@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html>
 <head>
@@ -23,4 +24,31 @@ function init() {
 <div id="mapDiv"
 	style="width:400px; height:400px;"></div>
 </body>
+=======
+<!doctype html>
+<html>
+<head>
+<title>Map of Paris</title>
+<link rel="stylesheet" href="https://openlayers.org/en/v4.1.1/css/ol.css" type="text/css" />
+<script src="https://openlayers.org/en/v4.1.1/build/ol.js" type="text/javascript"></script>
+</head>
+<script type="text/javascript">
+function init() {
+	myMap = new ol.Map({target: "mapDiv"});
+		osmLayer = new ol.layer.Tile({
+			source: new ol.source.OSM()
+		});
+		myMap.addLayer(osmLayer);
+		myMap.setView(
+			new ol.View({ center: [255414,6250838], zoom: 16})
+		);
+		myMap.addControl(new ol.control.MousePosition());
+		myMap.addControl(new ol.control.ScaleLine());
+}
+</script>
+<body onload="init()">
+<div id="mapDiv"
+	style="width:400px; height:400px;"></div>
+</body>
+>>>>>>> origin/master
 </html>

@@ -26,6 +26,10 @@
 	<div>
 		<button type="button" onclick="submitButton.uploadDelta()">Save</button>
 	</div>
+	<div>
+		<canvas id="c">
+		</canvas>
+	</div>
 	
 <!--	<div>
 		<button type="button" onclick="fixButton.deltaToString()">debug</button>
@@ -38,6 +42,23 @@
 	<!-- Quill library -->
 	<script src="https://cdn.quilljs.com/1.2.5/quill.js"></script>
 
+	<script src="http://win371.ad.utwente.nl/student/s1811185/WebAppDev/fabric.js-1.7.12/dist/fabric.js"></script>
+	<script>
+		// create a wrapper around native canvas element (with id="c")
+		var canvas = new fabric.Canvas('c');
+
+		// create a rectangle object
+		var rect = new fabric.Rect({
+		  left: 100,
+		  top: 100,
+		  fill: 'red',
+		  width: 20,
+		  height: 20
+		});
+
+		// "add" rectangle onto canvas
+		canvas.add(rect);
+	</script>
 	<!-- Quill editor -->
 	<script>
 	  var quill = new Quill('#editor', {
@@ -51,19 +72,38 @@ check the dir, and treat the delta appropriately.
 How do I upload the two at once?
 -->
 
+<!--
+To get the size of the JSON
+-->
+
+	<script type="text/javascript">
+
+	  var myObject = {'name':'Kasun', 'address':'columbo','age': '29'}
+
+	  var count = Object.keys(myObject).length;
+	  console.log(count);
+	</script>
+	
+	
 	<script>
+
 	var delta;
-		var submitButton = {
-			uploadDelta: function () {
-					delta = quill.getContents();
-					console.log(delta);
-					var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
-					localStorage.setItem("upScript", upScript)
-					dir = localStorage.dir
-					$.post( upScript, [delta, localStorage.dir] );
-					return upScript;
-					}
-		}
+	var submitButton = {
+		uploadDelta: function () {
+				delta = quill.getContents();
+				console.log(delta);
+				var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
+				localStorage.setItem("upScript", upScript)
+				$.post(upScript, delta);
+				return upScript;
+				}
+	}
+			
+	deltaSize = function(obj) {
+			var size = Object.keys(delta).length
+			return size;
+		};
+	console.log(deltaSize)
 	</script>
 	
 <!--
