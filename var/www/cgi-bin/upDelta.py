@@ -13,7 +13,8 @@ def do_POST(self):
 	content_length = len(delta.encode("utf-8")) # <--- Gets the size of data
 	post_data = self.rfile.read(content_length) # <--- Gets the data itself
 	self.send_response(200)
-
+	print(post_data)
+	input("prompt: ")
 	client.close()
 
 	#import pdb; pdb.set_trace()
@@ -28,18 +29,7 @@ except KeyboardInterrupt:
 	pass
 
 myServer.server_close()
-print(time.asctime(), "Server Stops - %s:%s" % (hostName, hostPort))```
-
-
-
-
-
-
-
-
-
-
-
+print(time.asctime(), "Server Stops - %s:%s" % (hostName, hostPort))
 
 
 

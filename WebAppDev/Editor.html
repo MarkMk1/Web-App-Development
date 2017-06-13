@@ -31,7 +31,8 @@
 		</canvas>
 	</div>
 	
-<!--	<div>
+<!--	
+	<div>
 		<button type="button" onclick="fixButton.deltaToString()">debug</button>
 	</div>
 -->
@@ -219,15 +220,23 @@ To get the size of the JSON
 				console.log(delta);
 				var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
 				localStorage.setItem("upScript", upScript)
-				$.post(upScript, delta);
+				
+				$.ajax({
+					type: 'POST',
+					url: upScript,
+					data: function(x){return delta},
+					success: function(){
+					
+					},
+				})
 				return upScript;
-				}
+		}
 	}
 			
 	deltaSize = function(obj) {
 			var size = Object.keys(delta).length
 			return size;
-		};
+	};
 	console.log(deltaSize)
 	</script>
 	

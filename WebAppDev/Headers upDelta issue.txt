@@ -1,0 +1,25 @@
+Prompt: 
+
+POST /student/s1811185/webappdev/http%3A%2F%2Fwin371.ad.utwente.nl%2Fstudent%2Fs1811185%2Fvar%2Fwww%2Fcgi-bin%2FupDelta.py HTTP/1.1
+Host: win371.ad.utwente.nl
+Connection: keep-alive
+Content-Length: 0
+Accept: */*
+Origin: http://win371.ad.utwente.nl
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36
+Referer: http://win371.ad.utwente.nl/student/s1811185/webappdev/editor.html
+Accept-Encoding: gzip, deflate
+Accept-Language: en-GB,en;q=0.8,nl;q=0.6
+Cookie: gsScrollPos-1967=0; gsScrollPos-2545=0; gsScrollPos-2071=0; gsScrollPos-2631=; gsScrollPos-267=0; __utma=84296669.2086321174.1496520379.1497123596.1497123596.1; __utmc=84296669; __utmz=84296669.1497123596.1.1.utmcsr=linkedin.com|utmccn=(referral)|utmcmd=referral|utmcct=/; userId=wrd:6571E56BCB8B6014287BADF214AB3E72; _ga=GA1.2.2086321174.1496520379
+
+Response:
+
+HTTP/1.1 502 Bad Gateway
+Cache-Control: private
+Content-Type: text/html; charset=utf-8
+Server: Microsoft-IIS/7.5
+X-Powered-By: ASP.NET
+Date: Tue, 13 Jun 2017 15:19:29 GMT
+Content-Length: 5401
+
