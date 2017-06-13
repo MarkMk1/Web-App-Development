@@ -43,6 +43,11 @@
 	<script src="https://cdn.quilljs.com/1.2.5/quill.js"></script>
 
 	<script src="http://win371.ad.utwente.nl/student/s1811185/WebAppDev/fabric.js-1.7.12/dist/fabric.js"></script>
+	<!-- 
+	I want to change what delta is displayed based on which object is selected in the canvas. 
+	Can I do this easily without just loading the new delta over the old? 
+	Can I make different instances that display based on what's selected?
+	-->
 	<script>
 		// create a wrapper around native canvas element (with id="c")
 		var canvas = new fabric.Canvas('c');
@@ -54,36 +59,77 @@
 		rx: 30,
 		ry: 40
 		});
+		
+		canvas.selection = false;
+		
+		ellip.set('selectable', true);
+		ellip.set('lockMovementX', true);
+		ellip.set('lockMovementY', true);
+		ellip.set('lockScalingX', true);
+		ellip.set('lockScalingY', true);
+		ellip.set('lockUniScaling', true);
+		ellip.set('lockRotation', true);
+		
+		ellip.on('selected', function() {
+			console.log('delta for current position, outline of immediate plans');
+		});
+
+		
 		var sGoal1 = new fabric.Circle({
 		left: 90, 
 		top: 30,
 		fill: 'purple', 
 		radius: 20
 		})
+		sGoal1.on('selected', function() {
+			console.log('delta for sub-goal 1');
+		});
+		
+		
 		var sGoal2 = new fabric.Circle({
 		left: 90, 
 		top: 75,
 		fill: 'purple', 
 		radius: 20
 		})
+		sGoal2.on('selected', function() {
+			console.log('delta for sub-goal 2');
+		});
+		
+		
 		var sGoal3 = new fabric.Circle({
 		left: 90, 
 		top: 120,
 		fill: 'purple', 
 		radius: 20
 		})
+		sGoal3.on('selected', function() {
+			console.log('delta for sub-goal 3');
+		});
+
+		
 		var uGoal1 = new fabric.Circle({
 		left: 170, 
 		top: 60,
 		fill: 'pink', 
 		radius: 30
 		})
+		uGoal1.on('selected', function() {
+			console.log('delta for general-goal 1');
+		});
+		
+		
 		var uGoal2 = new fabric.Circle({
 		left: 330, 
 		top: 60,
 		fill: 'pink', 
 		radius: 30
 		})
+		uGoal2.on('selected', function() {
+			console.log('delta for general-goal 2');
+		});
+
+		
 		var end = new fabric.Ellipse({
 		left: 500,
 		top: 50,
@@ -91,6 +137,52 @@
 		rx: 30,
 		ry: 40
 		});
+		end.on('selected', function() {
+			console.log('delta for end goal');
+		});
+
+		
+		sGoal1.set('lockMovementX', true);
+		sGoal1.set('lockMovementY', true);
+		sGoal1.set('lockScalingX', true);
+		sGoal1.set('lockScalingY', true);
+		sGoal1.set('lockUniScaling', true);
+		sGoal1.set('lockRotation', true);
+		
+		sGoal2.set('lockMovementX', true);
+		sGoal2.set('lockMovementY', true);
+		sGoal2.set('lockScalingX', true);
+		sGoal2.set('lockScalingY', true);
+		sGoal2.set('lockUniScaling', true);
+		sGoal2.set('lockRotation', true);
+
+		sGoal3.set('lockMovementX', true);
+		sGoal3.set('lockMovementY', true);
+		sGoal3.set('lockScalingX', true);
+		sGoal3.set('lockScalingY', true);
+		sGoal3.set('lockUniScaling', true);
+		sGoal3.set('lockRotation', true);
+
+		uGoal1.set('lockMovementX', true);
+		uGoal1.set('lockMovementY', true);
+		uGoal1.set('lockScalingX', true);
+		uGoal1.set('lockScalingY', true);
+		uGoal1.set('lockUniScaling', true);
+		uGoal1.set('lockRotation', true);
+
+		uGoal2.set('lockMovementX', true);
+		uGoal2.set('lockMovementY', true);
+		uGoal2.set('lockScalingX', true);
+		uGoal2.set('lockScalingY', true);
+		uGoal2.set('lockUniScaling', true);
+		uGoal2.set('lockRotation', true);
+
+		end.set('lockMovementX', true);
+		end.set('lockMovementY', true);
+		end.set('lockScalingX', true);
+		end.set('lockScalingY', true);
+		end.set('lockUniScaling', true);
+		end.set('lockRotation', true);
 		
 		canvas.add(ellip);
 		canvas.add(sGoal1);
