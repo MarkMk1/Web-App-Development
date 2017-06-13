@@ -27,7 +27,7 @@
 		<button type="button" onclick="submitButton.uploadDelta()">Save</button>
 	</div>
 	<div>
-		<canvas id="c">
+		<canvas id="c" width="1280" height="800">
 		</canvas>
 	</div>
 	
@@ -46,18 +46,59 @@
 	<script>
 		// create a wrapper around native canvas element (with id="c")
 		var canvas = new fabric.Canvas('c');
-
-		// create a rectangle object
-		var rect = new fabric.Rect({
-		  left: 100,
-		  top: 100,
-		  fill: 'red',
-		  width: 20,
-		  height: 20
+		
+		var ellip = new fabric.Ellipse({
+		left: 10,
+		top: 50,
+		fill: 'pink',
+		rx: 30,
+		ry: 40
 		});
-
-		// "add" rectangle onto canvas
-		canvas.add(rect);
+		var sGoal1 = new fabric.Circle({
+		left: 90, 
+		top: 30,
+		fill: 'purple', 
+		radius: 20
+		})
+		var sGoal2 = new fabric.Circle({
+		left: 90, 
+		top: 75,
+		fill: 'purple', 
+		radius: 20
+		})
+		var sGoal3 = new fabric.Circle({
+		left: 90, 
+		top: 120,
+		fill: 'purple', 
+		radius: 20
+		})
+		var uGoal1 = new fabric.Circle({
+		left: 170, 
+		top: 60,
+		fill: 'pink', 
+		radius: 30
+		})
+		var uGoal2 = new fabric.Circle({
+		left: 330, 
+		top: 60,
+		fill: 'pink', 
+		radius: 30
+		})
+		var end = new fabric.Ellipse({
+		left: 500,
+		top: 50,
+		fill: 'pink',
+		rx: 30,
+		ry: 40
+		});
+		
+		canvas.add(ellip);
+		canvas.add(sGoal1);
+		canvas.add(sGoal2);
+		canvas.add(sGoal3);
+		canvas.add(uGoal1);
+		canvas.add(uGoal2);
+		canvas.add(end);
 	</script>
 	<!-- Quill editor -->
 	<script>
@@ -76,17 +117,9 @@ How do I upload the two at once?
 To get the size of the JSON
 -->
 
-	<script type="text/javascript">
-
-	  var myObject = {'name':'Kasun', 'address':'columbo','age': '29'}
-
-	  var count = Object.keys(myObject).length;
-	  console.log(count);
-	</script>
 	
 	
 	<script>
-
 	var delta;
 	var submitButton = {
 		uploadDelta: function () {
