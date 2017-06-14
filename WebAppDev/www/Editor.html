@@ -14,18 +14,19 @@
 <body>
  <!-- Include stylesheet -->
 	<link href="https://cdn.quilljs.com/1.2.5/quill.snow.css" rel="stylesheet">
-	<div>
-		<p>There's this here... </p>
-	</div>
-	<!-- Create the editor container -->
+
+	<!-- Create the editor containers -->
 	<div id="editor">
-	  <p>Hello World!</p>
-	  <p>Some initial <strong>bold</strong> text</p>
-	  <p><br></p>
 	</div>
+	<div id="editor2">
+	</div>
+	
 	<div>
-		<button type="button" onclick="submitButton.uploadDelta()">Save</button>
+		<button type="button" onclick="submitButton.uploadDelta()">Sync</button>
 	</div>
+	
+
+	
 	<div>
 		<canvas id="c" width="1280" height="800">
 		</canvas>
@@ -52,82 +53,81 @@
 	<script>
 		// create a wrapper around native canvas element (with id="c")
 		var canvas = new fabric.Canvas('c');
-		
-		var ellip = new fabric.Ellipse({
+		canvas.selection = false;
+		window.graphQuillActive;
+
+		var start = new fabric.Ellipse({
 		left: 10,
 		top: 50,
 		fill: 'pink',
 		rx: 30,
 		ry: 40
 		});
-		
-		canvas.selection = false;
-		
-		ellip.set('selectable', true);
-		ellip.set('lockMovementX', true);
-		ellip.set('lockMovementY', true);
-		ellip.set('lockScalingX', true);
-		ellip.set('lockScalingY', true);
-		ellip.set('lockUniScaling', true);
-		ellip.set('lockRotation', true);
-		
-		ellip.on('selected', function() {
-			console.log('delta for current position, outline of immediate plans');
+		//Following function sets contents, and also sets a global variable
+		//Which can be used to determine what delta should be overwritten when saving. 
+		start.on('selected', function(){
+			graphQuill.setContents(window.startDelta);
+			window.graphQuillActive = "start"
 		});
 
 		
-		var sGoal1 = new fabric.Circle({
+		var firstSubGoal = new fabric.Circle({
 		left: 90, 
 		top: 30,
 		fill: 'purple', 
 		radius: 20
 		})
-		sGoal1.on('selected', function() {
-			console.log('delta for sub-goal 1');
+		firstSubGoal.on('selected', function() {
+			graphQuill.setContents(window.firstSubGoalData);
+			window.graphQuillActive = "firstSubGoal"
 		});
 		
 		
-		var sGoal2 = new fabric.Circle({
+		var secondSubGoal = new fabric.Circle({
 		left: 90, 
 		top: 75,
 		fill: 'purple', 
 		radius: 20
 		})
-		sGoal2.on('selected', function() {
-			console.log('delta for sub-goal 2');
+		secondSubGoal.on('selected', function() {
+			graphQuill.setContents(window.secondSubGoalData);
+			window.graphQuillActive = "secondSubGoal"
 		});
 		
 		
-		var sGoal3 = new fabric.Circle({
+		var thirdSubGoal = new fabric.Circle({
 		left: 90, 
 		top: 120,
 		fill: 'purple', 
 		radius: 20
 		})
-		sGoal3.on('selected', function() {
-			console.log('delta for sub-goal 3');
+		thirdSubGoal.on('selected', function() {
+			graphQuill.setContents(window.thirdSubGoalData);
+			window.graphQuillActive = "thirdSubGoal"
 		});
 
 		
-		var uGoal1 = new fabric.Circle({
+		var firstRoughGoal = new fabric.Circle({
 		left: 170, 
 		top: 60,
 		fill: 'pink', 
 		radius: 30
 		})
-		uGoal1.on('selected', function() {
-			console.log('delta for general-goal 1');
+		firstRoughGoal.on('selected', function() {
+			graphQuill.setContents(window.firstRoughGoalData);
+			window.graphQuillActive = "firstRoughGoal"
 		});
 		
 		
-		var uGoal2 = new fabric.Circle({
+		var secondRoughGoal = new fabric.Circle({
 		left: 330, 
 		top: 60,
 		fill: 'pink', 
 		radius: 30
 		})
-		uGoal2.on('selected', function() {
-			console.log('delta for general-goal 2');
+		secondRoughGoal.on('selected', function() {
+			graphQuill.setContents(window.secondRoughGoalData);
+			window.graphQuillActive = "secondRoughGoal"
 		});
 
 		
@@ -139,44 +139,53 @@
 		ry: 40
 		});
 		end.on('selected', function() {
-			console.log('delta for end goal');
+			graphQuill.setContents(window.endData);
+			window.graphQuillActive = "end"
 		});
 
+				
+		start.set('selectable', true);
+		start.set('lockMovementX', true);
+		start.set('lockMovementY', true);
+		start.set('lockScalingX', true);
+		start.set('lockScalingY', true);
+		start.set('lockUniScaling', true);
+		start.set('lockRotation', true);
 		
-		sGoal1.set('lockMovementX', true);
-		sGoal1.set('lockMovementY', true);
-		sGoal1.set('lockScalingX', true);
-		sGoal1.set('lockScalingY', true);
-		sGoal1.set('lockUniScaling', true);
-		sGoal1.set('lockRotation', true);
+		firstSubGoal.set('lockMovementX', true);
+		firstSubGoal.set('lockMovementY', true);
+		firstSubGoal.set('lockScalingX', true);
+		firstSubGoal.set('lockScalingY', true);
+		firstSubGoal.set('lockUniScaling', true);
+		firstSubGoal.set('lockRotation', true);
 		
-		sGoal2.set('lockMovementX', true);
-		sGoal2.set('lockMovementY', true);
-		sGoal2.set('lockScalingX', true);
-		sGoal2.set('lockScalingY', true);
-		sGoal2.set('lockUniScaling', true);
-		sGoal2.set('lockRotation', true);
+		secondSubGoal.set('lockMovementX', true);
+		secondSubGoal.set('lockMovementY', true);
+		secondSubGoal.set('lockScalingX', true);
+		secondSubGoal.set('lockScalingY', true);
+		secondSubGoal.set('lockUniScaling', true);
+		secondSubGoal.set('lockRotation', true);
 
-		sGoal3.set('lockMovementX', true);
-		sGoal3.set('lockMovementY', true);
-		sGoal3.set('lockScalingX', true);
-		sGoal3.set('lockScalingY', true);
-		sGoal3.set('lockUniScaling', true);
-		sGoal3.set('lockRotation', true);
+		thirdSubGoal.set('lockMovementX', true);
+		thirdSubGoal.set('lockMovementY', true);
+		thirdSubGoal.set('lockScalingX', true);
+		thirdSubGoal.set('lockScalingY', true);
+		thirdSubGoal.set('lockUniScaling', true);
+		thirdSubGoal.set('lockRotation', true);
 
-		uGoal1.set('lockMovementX', true);
-		uGoal1.set('lockMovementY', true);
-		uGoal1.set('lockScalingX', true);
-		uGoal1.set('lockScalingY', true);
-		uGoal1.set('lockUniScaling', true);
-		uGoal1.set('lockRotation', true);
+		firstRoughGoal.set('lockMovementX', true);
+		firstRoughGoal.set('lockMovementY', true);
+		firstRoughGoal.set('lockScalingX', true);
+		firstRoughGoal.set('lockScalingY', true);
+		firstRoughGoal.set('lockUniScaling', true);
+		firstRoughGoal.set('lockRotation', true);
 
-		uGoal2.set('lockMovementX', true);
-		uGoal2.set('lockMovementY', true);
-		uGoal2.set('lockScalingX', true);
-		uGoal2.set('lockScalingY', true);
-		uGoal2.set('lockUniScaling', true);
-		uGoal2.set('lockRotation', true);
+		secondRoughGoal.set('lockMovementX', true);
+		secondRoughGoal.set('lockMovementY', true);
+		secondRoughGoal.set('lockScalingX', true);
+		secondRoughGoal.set('lockScalingY', true);
+		secondRoughGoal.set('lockUniScaling', true);
+		secondRoughGoal.set('lockRotation', true);
 
 		end.set('lockMovementX', true);
 		end.set('lockMovementY', true);
@@ -185,17 +194,21 @@
 		end.set('lockUniScaling', true);
 		end.set('lockRotation', true);
 		
-		canvas.add(ellip);
-		canvas.add(sGoal1);
-		canvas.add(sGoal2);
-		canvas.add(sGoal3);
-		canvas.add(uGoal1);
-		canvas.add(uGoal2);
+		canvas.add(start);
+		canvas.add(firstSubGoal);
+		canvas.add(secondSubGoal);
+		canvas.add(thirdSubGoal);
+		canvas.add(firstRoughGoal);
+		canvas.add(secondRoughGoal);
 		canvas.add(end);
 	</script>
+	
 	<!-- Quill editor -->
 	<script>
 	  var quill = new Quill('#editor', {
+		theme: 'snow'
+	  });
+	  var graphQuill = new Quill('#editor2', {
 		theme: 'snow'
 	  });
 	</script> 
@@ -210,34 +223,37 @@ How do I upload the two at once?
 To get the size of the JSON
 -->
 
-	
+	<script>
+		quill.setContents(mainDelta)
+	</script>
 	
 	<script>
 	var delta;
 	var submitButton = {
 		uploadDelta: function () {
-				delta = quill.getContents();
-				console.log(delta);
-				var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
-				localStorage.setItem("upScript", upScript)
+				mainDelta = quill.getContents();
+				subDelta = graphQuill.getContents();
 				
-				$.ajax({
-					type: 'POST',
-					url: upScript,
-					data: function(delta){return delta},
-					success: function(){
+//				var upScript = encodeURIComponent("http://win371.ad.utwente.nl/student/s1811185/var/www/cgi-bin/upDelta.py")
+//				localStorage.setItem("upScript", upScript)
+				
+//				$.ajax({
+//					type: 'POST',
+//					url: upScript,
+//					data: function(delta){return delta},
+//					success: function(){
 					
-					},
-				})
-				return upScript;
+//					},
+//				})
+//				return upScript;
 		}
 	}
 			
-	deltaSize = function(obj) {
-			var size = Object.keys(delta).length
-			return size;
-	};
-	console.log(deltaSize)
+//	deltaSize = function(obj) {
+//			var size = Object.keys(delta).length
+//			return size;
+//	};
+//	console.log(deltaSize)
 	</script>
 	
 <!--
