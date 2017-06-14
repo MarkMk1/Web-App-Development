@@ -45,7 +45,7 @@
 		// create a wrapper around native canvas element (with id="c")
 		var canvas = new fabric.Canvas('c');
 		canvas.selection = false;
-		window.graphQuillActive;
+		var graphQuillActive = "start";
 
 		var start = new fabric.Ellipse({
 			left: 10,
@@ -58,12 +58,12 @@
 		//Following function sets contents, and also sets a global variable
 		//Which can be used to determine what delta should be overwritten when saving. 
 		start.on('selected', function(){
-			window.graphQuillActive = "start"
-			graphQuill.setContents(userData[window.graphQuillActive]);
+			graphQuillActive = "start"
+			graphQuill.setContents(userData[graphQuillActive]);
 		});
 
 		canvas.on('selected', function() { 
-			console.log(userData[window.graphQuillActive])
+			console.log(userData[graphQuillActive])
 		})
 		
 		var firstSubGoal = new fabric.Circle({
@@ -73,9 +73,9 @@
 			radius: 20
 		})
 		firstSubGoal.on('selected', function() {
-			window.graphQuillActive = "firstSubGoal"
-			graphQuill.setContents(userData[window.graphQuillActive]);
-			console.log(userData[window.graphQuillActive])
+			graphQuillActive = "firstSubGoal"
+			graphQuill.setContents(userData[graphQuillActive]);
+			console.log(userData[graphQuillActive])
 		});
 		
 		
@@ -86,8 +86,8 @@
 		radius: 20
 		})
 		secondSubGoal.on('selected', function() {
-			window.graphQuillActive = "secondSubGoal"
-			graphQuill.setContents(userData[window.graphQuillActive]);
+			graphQuillActive = "secondSubGoal"
+			graphQuill.setContents(userData[graphQuillActive]);
 
 		});
 		
@@ -99,8 +99,8 @@
 		radius: 20
 		})
 		thirdSubGoal.on('selected', function() {
-			window.graphQuillActive = "thirdSubGoal"
-			graphQuill.setContents(userData[window.graphQuillActive]);
+			graphQuillActive = "thirdSubGoal"
+			graphQuill.setContents(userData[graphQuillActive]);
 		});
 
 		
@@ -111,8 +111,8 @@
 		radius: 30
 		})
 		firstRoughGoal.on('selected', function() {
-			window.graphQuillActive = "firstRoughGoal"
-			graphQuill.setContents(userData[window.graphQuillActive]);
+			graphQuillActive = "firstRoughGoal"
+			graphQuill.setContents(userData[graphQuillActive]);
 		});
 		
 		
@@ -123,8 +123,8 @@
 		radius: 30
 		})
 		secondRoughGoal.on('selected', function() {
-			window.graphQuillActive = "secondRoughGoal"
-			graphQuill.setContents(userData[window.graphQuillActive]);
+			graphQuillActive = "secondRoughGoal"
+			graphQuill.setContents(userData[graphQuillActive]);
 		});
 
 		
@@ -136,8 +136,8 @@
 		ry: 40
 		});
 		end.on('selected', function() {
-			window.graphQuillActive = "end"
-			graphQuill.setContents(userData[window.graphQuillActive]);
+			graphQuillActive = "end"
+			graphQuill.setContents(userData[graphQuillActive]);
 		});
 
 				
@@ -214,16 +214,17 @@
 				if(canvas.getActiveObject()== null)
 					{canvas.setActiveObject(canvas.item(0))}
 				userData["mainDelta"] = quill.getContents();
-				userData[window.graphQuillActive] = graphQuill.getContents();
-				console.log(userData)
-				// $.ajax({
-				// 	type: 'POST',
-				// 	// url: upScript,
-				// 	data: {name: "bar", password: "baze", data: userData},
-				// 	success: function(){
+				console.log("Active quill editor: " + graphQuillActive)
+				userData[graphQuillActive] = graphQuill.getContents();
+				console.log(JSON.stringify(userData))
+				$.ajax({
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify({name: "bar", password: "baze", data: userData}),
+					success: function(){
 
-				// 	},
-				// })
+					},
+				})
 			}
 		}
 	</script>	

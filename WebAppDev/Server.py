@@ -1,9 +1,11 @@
 #!/usr/bin/python3
+import os
 import csv
 import cgi
-import os
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
+import simplejson as json
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.client import HTTPMessage
 
 
 '''
@@ -91,17 +93,28 @@ class user_handler_class(BaseHTTPRequestHandler):
 	'''
 	def do_POST(self):		
 		print( "incoming POST request from: ", self.client_address )
-		#cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and headers
-		postData = cgi.FieldStorage(
-									fp=self.rfile,
-									headers=self.headers,
+		#cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and header
+
+		print(self.headers["Content-Type"])		
+		if self.headers["Content-Type"] == "application/x-www-form-urlencoded":
+			postData =  cgi.FieldStorage(
+										fp=self.rfile,
+										headers=self.headers,
 									environ={'REQUEST_METHOD':'POST'})
+		elif self.headers["Content-Type"] == "application/json":
+			postRawData =  self.rfile.read(int(self.headers["Content-Length"]))
+			postData = json.loads(postRawData)
 		print(postData)
 
 		#A name and password should be attached to every POST request so server knows where the request is coming from. 
 		if "name" in postData and "password" in postData:
-			clientName =  postData.getvalue('name')
-			clientPass =  postData.getvalue('password')
+			if self.headers["Content-Type"] == "application/x-www-form-urlencoded":
+				clientName =  postData.getvalue('name')
+				clientPass =  postData.getvalue('password')
+			elif self.headers["Content-Type"] == "application/json":
+				clientName =  str(postData['name'])
+				clientPass =  str(postData['password'])
+
 			print("Name received: " + clientName + " Password received: " + clientPass)
 
 			#Checks if username and password exist in User_Info and if not it will create an entry for it.
@@ -125,16 +138,16 @@ class user_handler_class(BaseHTTPRequestHandler):
 			if "data" in postData:				
 				# If data is included in POST request then this is a save and upload action and not a login, 
 				# so save the data to the userJsonFile add the data to the editor page and return the editor page.
-				clientData =  postData.getvalue('data')
-				print("clientData: "+ clientData)
+				clientData =  postData['data']
+				print("clientData: "+ str(clientData))
 				with open(clientName + clientPass + ".json", 'w') as jsonFile:
-					data=jsonFile.write(clientData)
+					#data=jsonFile.write(str(clientData))
+					json.dump(clientData, jsonFile)
 				
 			else:
 				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
 				with open(os.path.join(os.path.realpath(__file__)[0:-10],'www','Editor.html'), 'r') as myfile:
-					editorPage=myfile.read() #.replace('\n', '')
-					print(editorPage)
+					editorPage=myfile.read() #.replace('\n', '')					
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
