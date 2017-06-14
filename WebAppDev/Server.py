@@ -13,10 +13,13 @@ HOST_NAME = '' # Change to webserver host
 PORT_NUMBER = 8080 # Change to 80 on production server
 
 '''
-Handler class subclassing BaseHTTPRequestHandler to define how the POST request is handled
+Handler class subclassing BaseHTTPRequestHandler to define how the POST and GET requests are handled
 '''
 class user_handler_class(BaseHTTPRequestHandler):
-	# Server will need to serve the index.html page via GET request
+
+	'''
+	GET requests will only serve the index.html page, images and css via GET request, everything else will be posted
+	'''
 	def do_GET(self):
 		print('GET %s' % (self.path))
 		if self.path == "/":
@@ -83,8 +86,9 @@ class user_handler_class(BaseHTTPRequestHandler):
 					with open(path) as ifp:
 						self.wfile.write(ifp.read().encode("utf-8"))
 
-
-
+	'''
+	POST request will handle user login and user data updating.
+	'''
 	def do_POST(self):		
 		print( "incoming POST request from: ", self.client_address )
 		#cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and headers
@@ -100,7 +104,8 @@ class user_handler_class(BaseHTTPRequestHandler):
 			clientPass =  postData.getvalue('password')
 			print("Name received: " + clientName + " Password received: " + clientPass)
 
-			with open('User_Info.csv', "r+", newline='') as csvfile:
+			#Checks if username and password exist in User_Info and if not it will create an entry for it.
+			with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','User_Info.csv'), "r+", newline='') as csvfile:
 				userExists = False
 				reader = csv.DictReader(csvfile)
 				for row in reader:
@@ -116,7 +121,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 					fieldnames = ['name','pwd','a']
 					writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 					writer.writerow({'name': clientName, 'pwd': clientPass,'a': clientName + clientPass + ".json"})
-
+			
 			if "data" in postData:				
 				# If data is included in POST request then this is a save and upload action and not a login, 
 				# so save the data to the userJsonFile add the data to the editor page and return the editor page.
