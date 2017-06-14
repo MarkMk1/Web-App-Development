@@ -20,7 +20,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 	def do_GET(self):
 		print('GET %s' % (self.path))
 		if self.path == "/":
-			with open(os.path.join(os.getcwd(), 'www','index.html'), 'r') as myfile:
+			with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','index.html'), 'r') as myfile:
 				indexPage=myfile.read() #.replace('\n', '')
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
@@ -29,13 +29,13 @@ class user_handler_class(BaseHTTPRequestHandler):
 				self.wfile.write(indexPage.encode("utf-8"))	
 		else:
 			# Get the file path.
-			path = os.path.join(os.getcwd(), "www", *self.path.split("/")) #Split up self.path and convert it to a folder path
+			path = os.path.join(os.path.realpath(__file__)[0:-10], "www", *self.path.split("/")) #Split up self.path and convert it to a folder path
 			dirpath = None
 			print('FILE %s' % (path))
 
 			#Send the index.html page if browser tries to access folder
 			if os.path.exists(path) and os.path.isdir(path):
-				with open(os.path.join('www','index.html'), 'r') as myfile:
+				with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','index.html'), 'r') as myfile:
 					indexPage=myfile.read() #.replace('\n', '')
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
@@ -127,7 +127,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 				
 			else:
 				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
-				with open(os.path.join(os.getcwd(),'www','Editor.html'), 'r') as myfile:
+				with open(os.path.join(os.path.realpath(__file__)[0:-10],'www','Editor.html'), 'r') as myfile:
 					editorPage=myfile.read() #.replace('\n', '')
 					print(editorPage)
 					self.send_response(200)
