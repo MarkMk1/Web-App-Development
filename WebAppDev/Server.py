@@ -105,7 +105,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 			print("Name received: " + clientName + " Password received: " + clientPass)
 
 			#Checks if username and password exist in User_Info and if not it will create an entry for it.
-			with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','User_Info.csv'), "r+", newline='') as csvfile:
+			with open(os.path.join(os.path.realpath(__file__)[0:-10],'User_Info.csv'), "r+", newline='') as csvfile:
 				userExists = False
 				reader = csv.DictReader(csvfile)
 				for row in reader:
