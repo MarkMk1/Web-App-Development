@@ -16,6 +16,75 @@ PORT_NUMBER = 8080 # Change to 80 on production server
 Handler class subclassing BaseHTTPRequestHandler to define how the POST request is handled
 '''
 class user_handler_class(BaseHTTPRequestHandler):
+	# Server will need to serve the index.html page via GET request
+	def do_GET(self):
+		print('GET %s' % (self.path))
+		if self.path == "/":
+			with open(os.path.join('www','index.html'), 'r') as myfile:
+				indexPage=myfile.read() #.replace('\n', '')
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
+				# Send the html message
+				self.wfile.write(indexPage.encode("utf-8"))	
+		else:
+			# Get the file path.
+			path = os.path.join("www", *self.path.split("/")) #Split up self.path and convert it to a folder path
+			dirpath = None
+			print('FILE %s' % (path))
+
+			#Send the index.html page if browser tries to access folder
+			if os.path.exists(path) and os.path.isdir(path):
+				with open(os.path.join('www','index.html'), 'r') as myfile:
+					indexPage=myfile.read() #.replace('\n', '')
+					self.send_response(200)
+					self.send_header('Content-type','text/html')
+					self.end_headers()
+					# Send the html message
+					self.wfile.write(indexPage.encode("utf-8"))	
+
+			# Allow the user to type "///" at the end to see the
+			# directory listing.
+			if os.path.exists(path) and os.path.isfile(path):
+				# This is valid file, send it as the response
+				# after determining whether it is a type that
+				# the server recognizes.
+				_, ext = os.path.splitext(path)
+				ext = ext.lower()
+				content_type = {
+					'.css': 'text/css',
+					'.gif': 'image/gif',
+					'.htm': 'text/html',
+					'.html': 'text/html',
+					'.jpeg': 'image/jpeg',
+					'.jpg': 'image/jpg',
+					'.js': 'text/javascript',
+					'.png': 'image/png',
+					'.text': 'text/plain',
+					'.txt': 'text/plain',
+				}
+
+				# If it is a known extension, set the correct
+				# content type in the response.
+				if ext in content_type:
+					self.send_response(200)  # OK
+					self.send_header('Content-type', content_type[ext])
+					self.end_headers()
+
+					with open(path) as ifp:
+						self.wfile.write(ifp.read().encode("utf-8"))
+				else:
+					# Unknown file type or a directory.
+					# Treat it as plain text.
+					self.send_response(200)  # OK
+					self.send_header('Content-type', 'text/plain')
+					self.end_headers()
+
+					with open(path) as ifp:
+						self.wfile.write(ifp.read().encode("utf-8"))
+
+
+
 	def do_POST(self):		
 		print( "incoming POST request from: ", self.client_address )
 		#cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and headers
@@ -58,7 +127,14 @@ class user_handler_class(BaseHTTPRequestHandler):
 				
 			else:
 				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
-				pass
+				with open(os.path.join('www','Editor.html'), 'r') as myfile:
+					editorPage=myfile.read() #.replace('\n', '')
+					print(editorPage)
+					self.send_response(200)
+					self.send_header('Content-type','text/html')
+					self.end_headers()
+					# Send the html message
+					self.wfile.write(editorPage.encode("utf-8"))
 
 			#load
 
