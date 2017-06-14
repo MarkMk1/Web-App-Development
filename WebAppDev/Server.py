@@ -20,7 +20,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 	def do_GET(self):
 		print('GET %s' % (self.path))
 		if self.path == "/":
-			with open(os.path.join('www','index.html'), 'r') as myfile:
+			with open(os.path.join(os.getcwd(), 'www','index.html'), 'r') as myfile:
 				indexPage=myfile.read() #.replace('\n', '')
 				self.send_response(200)
 				self.send_header('Content-type','text/html')
