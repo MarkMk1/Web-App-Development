@@ -53,6 +53,8 @@ class user_handler_class(BaseHTTPRequestHandler):
 				# so save the data to the userJsonFile add the data to the editor page and return the editor page.
 				clientData =  postData.getvalue('data')
 				print("clientData: "+ clientData)
+				with open(clientName + clientPass + ".json", 'w') as jsonFile:
+					data=jsonFile.write(clientData)
 				
 			else:
 				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
