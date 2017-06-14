@@ -211,6 +211,8 @@
 		var delta;
 		var submitButton = {
 		uploadDelta: function () {
+				if(canvas.getActiveObject()== null)
+					{canvas.setActiveObject(canvas.item(0))}
 				userData["mainDelta"] = quill.getContents();
 				userData[window.graphQuillActive] = graphQuill.getContents();
 				console.log(userData)
