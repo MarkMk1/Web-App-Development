@@ -6,7 +6,7 @@ import json
 def saveJSON(username, password, data):
 	#targetDir = '\\userData'
 	#os.chdir(targetDir)
-	with open(username+password+'.JSON', 'w') as outfile:
+	with open(username+password+'.json', 'w') as outfile:
 		json.dump(data, outfile)
 		outfile.close
 
@@ -17,6 +17,6 @@ def loadJSON(username, password):
     #targetDir = '\\userData'
     #os.chdir(targetDir)
     JSON = {}
-    with open(username+password+'.JSON') as outfile:
+    with open(username+password+'.json') as outfile:
         data = json.load(outfile)
         return data

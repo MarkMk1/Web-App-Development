@@ -13,14 +13,7 @@ HOST_NAME = '' # Change to webserver host
 PORT_NUMBER = 8080 # Change to 80 on production server
 
 '''
-Configure cgi
-'''
-cgi_dir = "s1811185\WebAppDev\\"
-
-'''
-Handler class subclassing CGIHTTPRequestHandler to define how the POST request is handled
-CGIHTTPRequestHandler can be enabled in the command line by passing the --cgi option:
-e.g. python -m http.server --cgi 8000
+Handler class subclassing BaseHTTPRequestHandler to define how the POST request is handled
 '''
 class user_handler_class(BaseHTTPRequestHandler):
 	def do_POST(self):		
@@ -36,8 +29,10 @@ class user_handler_class(BaseHTTPRequestHandler):
 		if "name" in postData and "password" in postData:
 			clientName =  postData.getvalue('name')
 			clientPass =  postData.getvalue('password')
+			print("Name received: " + clientName + " Password received: " + clientPass)
 
-			with open(cgi_dir + 'User_Info.csv', newline='') as csvfile:
+			with open('User_Info.csv', "r+", newline='') as csvfile:
+				userExists = False
 				reader = csv.DictReader(csvfile)
 				for row in reader:
 					name = row["name"]
@@ -46,16 +41,24 @@ class user_handler_class(BaseHTTPRequestHandler):
 					if clientName == name:
 						if clientPass == password:
 							userJsonFileLocation = jsonFileLocation
-					else:
-						break
-						#TODO username and pass not found, add them to the csv instead of breaking out
+							userExists = True	
+				if not userExists:
+					#username and pass not found, add them to the csv 
+					fieldnames = ['name','pwd','a']
+					writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+					writer.writerow({'name': clientName, 'pwd': clientPass,'a': clientName + clientPass + ".json"})
 
-			if "data" in postData:
-				#TODO If data is included then this is a save and upload action and not a login, so save the data to the userJsonFile add the data to the editor page and return the editor page.
-				pass
+			if "data" in postData:				
+				# If data is included in POST request then this is a save and upload action and not a login, 
+				# so save the data to the userJsonFile add the data to the editor page and return the editor page.
+				clientData =  postData.getvalue('data')
+				print("clientData: "+ clientData)
+				
 			else:
 				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
 				pass
+
+			#load
 
 		else:
 			pass
