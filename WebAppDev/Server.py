@@ -29,7 +29,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 				self.wfile.write(indexPage.encode("utf-8"))	
 		else:
 			# Get the file path.
-			path = os.path.join("www", *self.path.split("/")) #Split up self.path and convert it to a folder path
+			path = os.path.join(os.getcwd(), "www", *self.path.split("/")) #Split up self.path and convert it to a folder path
 			dirpath = None
 			print('FILE %s' % (path))
 
@@ -127,7 +127,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 				
 			else:
 				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
-				with open(os.path.join('www','Editor.html'), 'r') as myfile:
+				with open(os.path.join(os.getcwd(),'www','Editor.html'), 'r') as myfile:
 					editorPage=myfile.read() #.replace('\n', '')
 					print(editorPage)
 					self.send_response(200)
