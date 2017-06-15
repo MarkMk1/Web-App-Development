@@ -439,3 +439,12 @@ h1 {
   color: white;
   padding: 15px 32px;
 }
+#btn-spacer{
+    display: block;
+    height: 60px;
+}
+
+.canvas-container {
+    display: block;
+    margin: 0 auto;
+}
