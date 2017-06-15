@@ -149,7 +149,10 @@ class user_handler_class(BaseHTTPRequestHandler):
 					writer.writerow({'name': clientName, 'pwd': clientPass,'a': clientName + clientPass + ".json"})
 					with open(clientName + clientPass + ".json", 'w') as jsonFile:
 						jsonFile.write("")
-			if "data" in postData:				
+			if "data" in postData:
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()				
 				# If data is included in POST request then this is a save and upload action and not a login, 
 				# so save the data to the userJsonFile add the data to the editor page and return the editor page.
 				clientData =  postData['data']
@@ -160,6 +163,9 @@ class user_handler_class(BaseHTTPRequestHandler):
 			else:
 				# No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
 				# Read the user's data and insert it into the Editor.html using beautifulsoup and return it.
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
 				with open(clientName + clientPass + ".json") as jsonFile:  
 					try:  
 						data = json.load(jsonFile)
@@ -169,9 +175,6 @@ class user_handler_class(BaseHTTPRequestHandler):
 				with open(os.path.join(os.path.realpath(__file__)[0:-10],'www','Editor.html'), 'r') as myfile:
 					editorPage = myfile.read()
 					soup = BeautifulSoup(editorPage, 'html.parser')					
-					self.send_response(200)
-					self.send_header('Content-type','text/html')
-					self.end_headers()
 					# Send the html message
 					userDataScript = soup.find('script', {"id" : "userData"})
 					userDataScript.insert(1,"\nvar _name = \"" + clientName + "\";\n")
