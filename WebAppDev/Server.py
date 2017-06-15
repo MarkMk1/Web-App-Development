@@ -49,8 +49,6 @@ class user_handler_class(BaseHTTPRequestHandler):
 					# Send the html message
 					self.wfile.write(indexPage.encode("utf-8"))	
 
-			# Allow the user to type "///" at the end to see the
-			# directory listing.
 			if os.path.exists(path) and os.path.isfile(path):
 				# This is valid file, send it as the response
 				# after determining whether it is a type that
@@ -88,6 +86,8 @@ class user_handler_class(BaseHTTPRequestHandler):
 
 					with open(path) as ifp:
 						self.wfile.write(ifp.read().encode("utf-8"))
+			else:
+				self.send_error(404)
 
 	'''
 	POST request will handle user login and user data updating.
@@ -97,7 +97,11 @@ class user_handler_class(BaseHTTPRequestHandler):
 		# cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and header
 
 		print(self.headers["Content-Type"])		
-		# cgi doesn't seem to support json so keeping it for parsing the form data but manually parsing the json POST
+		'''
+		cgi doesn't seem to support json so keeping it for parsing the form data but manually parsing the json POST
+		So, here we look at the POST header Content-Type and if it's a form we let cgi handle it, if it's json then
+		we use simplejson to parse, dump and load the POST data
+		'''
 		if self.headers["Content-Type"] == "application/x-www-form-urlencoded":
 			postData =  cgi.FieldStorage(
 										fp=self.rfile,
@@ -109,6 +113,14 @@ class user_handler_class(BaseHTTPRequestHandler):
 			postData = json.loads(postRawData)
 		print(postData)
 
+		'''
+		This section of logic handles the POST request as such:
+		1. Checks the POST contains username and password, otherwise doesn't do anything
+		2. Checks the username and password have been used before, if not then creates an entry for it.
+		3. Checks the POST for data or not. If it contains data then it is a sync/upload POST if not it is a login
+		4. Login POST retrieves the page and uses BeautifulSoup to embed the user's data into the editor page
+		5. sync/upload POST will store the data to the json file associated with the username and password
+		'''
 		# A name and password should be attached to every POST request so server knows where the request is coming from. 
 		if "name" in postData and "password" in postData:
 			# The cgi stores the form variabls in miniFieldStorage and the json is stored as a Dict so we need to get the name 
@@ -151,7 +163,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 				
 			else:
 				# No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
-						
+				# Read the user's data and insert it into the Editor.html using beautifulsoup and return it.
 				with open(clientName + clientPass + ".json") as jsonFile:  
 					try:  
 						data = json.load(jsonFile)
@@ -171,8 +183,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 					userDataScript.insert(3,"var userData = " + str(data) + ";\n")
 					self.wfile.write(soup.encode("utf-8"))
 		else:
-			pass
-			#TODO this needs to return a 404 page instead of pass.
+			self.send_error(404)
 
 '''
 run function to create and start http server instance httpd
