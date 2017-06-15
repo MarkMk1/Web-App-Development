@@ -207,20 +207,20 @@
 		var submitButton = {
 		uploadDelta: function () {
 				if(canvas.getActiveObject()== null)
-					{alert("Select a graph before you can save"}
+					{alert("Select a graph before you can save")}
 				else{
-				userData["mainDelta"] = quill.getContents();
-				console.log("Active quill editor: " + graphQuillActive)
-				userData[graphQuillActive] = graphQuill.getContents();
-				console.log(JSON.stringify(userData))
-				$.ajax({
-					type: 'POST',
-					contentType: 'application/json',
-					data: JSON.stringify({name: _name, password: _password, data: userData}),
-					success: function(){
+					userData["mainDelta"] = quill.getContents();
+					console.log("Active quill editor: " + graphQuillActive)
+					userData[graphQuillActive] = graphQuill.getContents();
+					console.log(JSON.stringify(userData))
+					$.ajax({
+						type: 'POST',
+						contentType: 'application/json',
+						data: JSON.stringify({name: _name, password: _password, data: userData}),
+						success: function(){
 
-					},
-				})
+						},
+					})
 				}
 		}
 	</script>	
