@@ -177,9 +177,6 @@ class user_handler_class(BaseHTTPRequestHandler):
 					userDataScript.insert(1,"\nvar _name = \"" + clientName + "\";\n")
 					userDataScript.insert(2,"var _password = \"" + clientPass + "\";\n")
 					userDataScript.insert(3,"var userData = " + str(data) + ";\n")
-					self.send_response(200)
-					self.send_header('Content-type','text/html')
-					self.end_headers()
 					self.wfile.write(soup.encode("utf-8"))
 		else:
 			self.send_error(404)
