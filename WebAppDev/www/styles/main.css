@@ -383,8 +383,18 @@ footer .wrapper .column.rightlist ul li a img:hover {
 .clear {
   clear:both;
 }
+
+/* Added Styling */
 .button {
-    background-color: #4CAF50; /* Green */
+    position: fixed;
+    bottom: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    left: 0px;
+    right: 0px;
+    width:100%;
+
+    background-color: #209e51; 
     border: none;
     color: white;
     padding: 15px 32px;
@@ -392,4 +402,40 @@ footer .wrapper .column.rightlist ul li a img:hover {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+.button:hover {
+    position: fixed;
+    bottom: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    left: 0px;
+    right: 0px;
+    width:100%;
+
+    background-color: #36a762; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.quarterheight {
+  height:25%;
+}
+
+h1 {
+  font-size: 55px;
+  font-family:'Baumans', cursive;
+  background-color: #51209E; 
+  color: white;
+  padding: 15px 32px;
+}
+
+.desc {
+  font-size: 20px;
+  background-color: #51209E; 
+  color: white;
+  padding: 15px 32px;
 }

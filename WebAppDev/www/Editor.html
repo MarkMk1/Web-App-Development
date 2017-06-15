@@ -3,23 +3,28 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Project</title>
+	<title>Project Editor</title>
 	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans|Baumans' type='text/css'>
 	<link href="//cdn.quilljs.com/1.2.5/quill.snow.css" rel="stylesheet">
 	<link href="//cdn.quilljs.com/1.2.5/quill.bubble.css" rel="stylesheet">  
-	<!-- <link rel="stylesheet" href="styles/reset.css" type="text/css" media="screen" /> -->
+	<link rel="stylesheet" href="styles/reset.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="screen" />
-<!-- 	<link rel="stylesheet" href="styles/main.min.css" type="text/css" media="screen" /> -->	
 	
 </head>
 <body>
+	<h1>Project Description Editor</h1>
+	<p class="desc">Give a brief overview of the project</p>
+	<div class="quarterheight" id="editor"></div>
+	<h1>Project Goal Graph</h1>
+	<p class="desc">Select each node of the graph, fill out the goal in the editor below, going from left to right, top to bottom</p>	
 	<div>
 		<canvas id="c" width="500" height="200"></canvas>
 	</div>
-	<div id="editor"></div>
-	<div id="editor2"></div>
+	<h1>Project Goal Editor</h1>
+	<p class="desc">Fill out the goal for the section and press sync as changing goal will otherwise remove changes</p>
+	<div class="quarterheight" id="editor2"></div>
 	<div>
-		<button class="button" type="button" onclick="submitButton.uploadDelta()">Sync</button>
+		<button class="button" type="button" onclick="submitButton.uploadDelta()">Save</button>
 	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
