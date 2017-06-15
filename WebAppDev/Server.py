@@ -3,7 +3,8 @@ import os
 import csv
 import cgi
 import time
-import simplejson as json
+import simplejson as json 
+from bs4 import BeautifulSoup # HTML Parsing
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from http.client import HTTPMessage
 
@@ -34,11 +35,11 @@ class user_handler_class(BaseHTTPRequestHandler):
 				self.wfile.write(indexPage.encode("utf-8"))	
 		else:
 			# Get the file path.
-			path = os.path.join(os.path.realpath(__file__)[0:-10], "www", *self.path.split("/")) #Split up self.path and convert it to a folder path
+			path = os.path.join(os.path.realpath(__file__)[0:-10], "www", *self.path.split("/")) # Split up self.path and convert it to a folder path
 			dirpath = None
 			print('FILE %s' % (path))
 
-			#Send the index.html page if browser tries to access folder
+			# Send the index.html page if browser tries to access folder
 			if os.path.exists(path) and os.path.isdir(path):
 				with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','index.html'), 'r') as myfile:
 					indexPage=myfile.read() #.replace('\n', '')
@@ -93,21 +94,25 @@ class user_handler_class(BaseHTTPRequestHandler):
 	'''
 	def do_POST(self):		
 		print( "incoming POST request from: ", self.client_address )
-		#cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and header
+		# cgi handles GET requests by default, so need to explicitly set to POST and pass in the do_POST's rfile and header
 
 		print(self.headers["Content-Type"])		
+		# cgi doesn't seem to support json so keeping it for parsing the form data but manually parsing the json POST
 		if self.headers["Content-Type"] == "application/x-www-form-urlencoded":
 			postData =  cgi.FieldStorage(
 										fp=self.rfile,
 										headers=self.headers,
 									environ={'REQUEST_METHOD':'POST'})
 		elif self.headers["Content-Type"] == "application/json":
+			# To read the rfile we need to get the length which is recorded in the header, then using simplejson to parse the json object.
 			postRawData =  self.rfile.read(int(self.headers["Content-Length"]))
 			postData = json.loads(postRawData)
 		print(postData)
 
-		#A name and password should be attached to every POST request so server knows where the request is coming from. 
+		# A name and password should be attached to every POST request so server knows where the request is coming from. 
 		if "name" in postData and "password" in postData:
+			# The cgi stores the form variabls in miniFieldStorage and the json is stored as a Dict so we need to get the name 
+			# and password differently for both types of POSTs
 			if self.headers["Content-Type"] == "application/x-www-form-urlencoded":
 				clientName =  postData.getvalue('name')
 				clientPass =  postData.getvalue('password')
@@ -117,7 +122,7 @@ class user_handler_class(BaseHTTPRequestHandler):
 
 			print("Name received: " + clientName + " Password received: " + clientPass)
 
-			#Checks if username and password exist in User_Info and if not it will create an entry for it.
+			# Checks if username and password exist in User_Info and if not it will create an entry for it.
 			with open(os.path.join(os.path.realpath(__file__)[0:-10],'User_Info.csv'), "r+", newline='') as csvfile:
 				userExists = False
 				reader = csv.DictReader(csvfile)
@@ -130,35 +135,44 @@ class user_handler_class(BaseHTTPRequestHandler):
 							userJsonFileLocation = jsonFileLocation
 							userExists = True	
 				if not userExists:
-					#username and pass not found, add them to the csv 
+					# username and pass not found, add them to the csv 
 					fieldnames = ['name','pwd','a']
 					writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 					writer.writerow({'name': clientName, 'pwd': clientPass,'a': clientName + clientPass + ".json"})
-			
+					with open(clientName + clientPass + ".json", 'w') as jsonFile:
+						jsonFile.write("")
 			if "data" in postData:				
 				# If data is included in POST request then this is a save and upload action and not a login, 
 				# so save the data to the userJsonFile add the data to the editor page and return the editor page.
 				clientData =  postData['data']
 				print("clientData: "+ str(clientData))
 				with open(clientName + clientPass + ".json", 'w') as jsonFile:
-					#data=jsonFile.write(str(clientData))
 					json.dump(clientData, jsonFile)
 				
 			else:
-				#TODO No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
+				# No data means this is a login return the editor page and load up jsonFile using the jsonFileLocation.
+						
+				with open(clientName + clientPass + ".json") as jsonFile:  
+					try:  
+						data = json.load(jsonFile)
+					except:
+						with open(os.path.join(os.path.realpath(__file__)[0:-10],'default.json')) as jsonDefaultFile:  
+							data = json.load(jsonDefaultFile)
 				with open(os.path.join(os.path.realpath(__file__)[0:-10],'www','Editor.html'), 'r') as myfile:
-					editorPage=myfile.read() #.replace('\n', '')					
+					editorPage = myfile.read()
+					soup = BeautifulSoup(editorPage, 'html.parser')					
 					self.send_response(200)
 					self.send_header('Content-type','text/html')
 					self.end_headers()
 					# Send the html message
-					self.wfile.write(editorPage.encode("utf-8"))
-
-			#load
-
+					userDataScript = soup.find('script', {"id" : "userData"})
+					userDataScript.insert(1,"\nvar _name = \"" + clientName + "\";\n")
+					userDataScript.insert(2,"var _password = \"" + clientPass + "\";\n")
+					userDataScript.insert(3,"var userData = " + str(data) + ";\n")
+					self.wfile.write(soup.encode("utf-8"))
 		else:
 			pass
-			#TODO this needs to return a 404 page instea of pass.
+			#TODO this needs to return a 404 page instead of pass.
 
 '''
 run function to create and start http server instance httpd
