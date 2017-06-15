@@ -421,15 +421,36 @@ footer .wrapper .column.rightlist ul li a img:hover {
     display: inline-block;
     font-size: 16px;
 }
+.login-button {
+
+    background-color: #209e51; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.login-button:hover {
+
+    background-color: #36a762; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
 .quarterheight {
   height:25%;
 }
 
 h1 {
+  color: #51209e;
   font-size: 55px;
   font-family:'Baumans', cursive;
-  background-color: #51209E; 
-  color: white;
   padding: 15px 32px;
 }
 

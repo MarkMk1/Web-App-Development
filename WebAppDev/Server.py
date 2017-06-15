@@ -26,13 +26,11 @@ class user_handler_class(BaseHTTPRequestHandler):
 	def do_GET(self):
 		print('GET %s' % (self.path))
 		if self.path == "/":
+			self.send_response(200)
+			self.send_header('Content-type','text/html')
+			self.end_headers()
 			with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','index.html'), 'r') as myfile:
-				indexPage=myfile.read() #.replace('\n', '')
-				self.send_response(200)
-				self.send_header('Content-type','text/html')
-				self.end_headers()
-				# Send the html message
-				self.wfile.write(indexPage.encode("utf-8"))	
+				self.wfile.write(myfile.read().encode("utf-8"))	
 		else:
 			# Get the file path.
 			path = os.path.join(os.path.realpath(__file__)[0:-10], "www", *self.path.split("/")) # Split up self.path and convert it to a folder path
@@ -41,13 +39,11 @@ class user_handler_class(BaseHTTPRequestHandler):
 
 			# Send the index.html page if browser tries to access folder
 			if os.path.exists(path) and os.path.isdir(path):
+				self.send_response(200)
+				self.send_header('Content-type','text/html')
+				self.end_headers()
 				with open(os.path.join(os.path.realpath(__file__)[0:-10], 'www','index.html'), 'r') as myfile:
-					indexPage=myfile.read() #.replace('\n', '')
-					self.send_response(200)
-					self.send_header('Content-type','text/html')
-					self.end_headers()
-					# Send the html message
-					self.wfile.write(indexPage.encode("utf-8"))	
+					self.wfile.write(myfile.read().encode("utf-8"))	
 
 			if os.path.exists(path) and os.path.isfile(path):
 				# This is valid file, send it as the response
