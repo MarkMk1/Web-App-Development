@@ -207,7 +207,8 @@
 		var submitButton = {
 		uploadDelta: function () {
 				if(canvas.getActiveObject()== null)
-					{canvas.setActiveObject(canvas.item(0))}
+					{alert("Select a graph before you can save"}
+				else{
 				userData["mainDelta"] = quill.getContents();
 				console.log("Active quill editor: " + graphQuillActive)
 				userData[graphQuillActive] = graphQuill.getContents();
@@ -220,7 +221,7 @@
 
 					},
 				})
-			}
+				}
 		}
 	</script>	
 </body>

@@ -1,1 +1,1 @@
-{"mainDelta": {"ops": [{"insert": "\n"}]}, "start": {"ops": [{"insert": "\n"}]}, "firstRoughGoal": {"ops": [{"insert": "\n"}]}}
+{"firstRoughGoal": {"ops": [{"insert": "This is a rough goal that should directly follow from sub goals\n"}]}, "secondRoughGoal": {"ops": [{"insert": "This is where you hope to end up\n"}]}, "start": {"ops": [{"insert": "This is the start of the project\n"}]}, "firstSubGoal": {"ops": [{"insert": "This is a sub goal\n"}]}, "mainDelta": {"ops": [{"insert": "This is a project with a focus on.... \n"}]}}
